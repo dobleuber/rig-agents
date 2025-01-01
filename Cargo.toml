@@ -1,0 +1,32 @@
+[package]
+name = "rig-agents"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+anyhow = "1.0.95"
+dotenv = "0.15.0"
+pdf-extract = "0.7.12"
+qdrant-client = "1.12.1"
+rayon = "1.10.0"
+rig-core = { version = "0.6.0", features = ["derive", "rayon"] }
+rig-qdrant = "0.1.4"
+schemars = "0.8.21"
+serde = { version = "1.0.217", features = ["derive"] }
+serde_json = "1.0.134"
+tavily = "2.0.3"
+thiserror = "2.0.9"
+tokio = { version = "1.42.0", features = ["full"] }
+
+
+[[bin]]
+name = "extractor"
+path = "src/examples/extractor.rs"
+
+[[bin]]
+name = "article_analyzer"
+path = "src/examples/article_analyzer.rs"
+
+[[bin]]
+name = "rag"
+path = "src/examples/rag.rs"

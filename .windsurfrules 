@@ -1,0 +1,66 @@
+### **Contexto del Proyecto**
+- **Propósito:** Crear un agente autónomo que pueda ejecutar diversas tareas utilizando la librería **Rig**.
+- **Uso:** Explorar y probar el comportamiento de agentes inteligentes.
+
+---
+
+### **Estructura del Proyecto**
+Se recomienda una estructura modular para que el código sea mantenible y escalable:
+
+```
+src/
+├── agents/           # Implementaciones específicas de los agentes
+├── tasks/            # Tareas que pueden ejecutar los agentes
+├── utils/            # Funciones de ayuda
+├── config.rs         # Configuración y manejo de variables de entorno
+├── main.rs           # Punto de entrada principal
+└── lib.rs            # Funciones y estructuras compartidas
+```
+
+---
+
+### **Dependencias**
+Tus dependencias están bien seleccionadas para manejar diversas funcionalidades. Aquí algunos puntos clave:
+- **`anyhow` y `thiserror`:** Para manejar errores de manera flexible y detallada.
+- **`dotenv`:** Para cargar configuraciones desde archivos `.env`.
+- **`rayon`:** Para paralelizar tareas.
+- **`rig-core` y `rig-qdrant`:** Integración con la librería Rig.
+- **`tokio`:** Manejo de asincronía.
+
+---
+
+### **Reglas de Desarrollo**
+1. **Documentación:**
+   - Documenta cada módulo y función con comentarios claros (`///`).
+   - Usa `cargo doc` para generar documentación en HTML y verificarla periódicamente.
+   - Define las responsabilidades de cada agente en el README del proyecto.
+
+2. **Estilo de Código:**
+   - Usa `rustfmt` para formatear automáticamente tu código.
+   - Prefiere funciones puras y evita mutabilidad innecesaria.
+   - Usa `clippy` para identificar posibles mejoras.
+
+3. **Flujo de Trabajo:**
+   - Configura un archivo `.env` con las variables necesarias para Qdrant y otros servicios.
+   - Usa `tokio` para implementar las operaciones asincrónicas.
+   - Prueba tus agentes con casos de uso definidos y documenta los resultados.
+
+4. **Tareas del Agente:**
+   - Define las tareas de forma modular en `tasks/`.
+   - Usa `serde` para serializar/deserializar datos si es necesario.
+   - Considera agregar logs con `tracing` para monitorear la ejecución de los agentes.
+
+---
+
+### **Próximos Pasos**
+1. **Configuración Inicial:**
+   - Carga configuraciones usando `dotenv` desde un archivo `.env`.
+   - Configura un cliente para Qdrant con las credenciales adecuadas.
+
+2. **Primera Implementación del Agente:**
+   - Define una estructura básica para el agente con `rig-core`.
+   - Integra una tarea simple (p. ej., consumir datos de una API o procesar texto).
+
+3. **Pruebas:**
+   - Usa tests unitarios para validar la lógica de las tareas (`#[test]`).
+   - Agrega ejemplos de ejecución como parte de la documentación.
