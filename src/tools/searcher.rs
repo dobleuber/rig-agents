@@ -4,11 +4,15 @@ use rig::{completion::ToolDefinition, tool::Tool};
 use serde::{Deserialize, Serialize};
 use serde_json::json;
 
-use tavily::Tavily;
+use tavily::{SearchRequest, Tavily};
 
 #[derive(Debug, Deserialize)]
 pub struct SearcherArgs {
     pub query: String,
+    pub max_results: Option<i32>,
+    pub advanced_search: Option<bool>,
+    pub topic: Option<String>,
+    pub include_days: Option<i32>,
 }
 
 #[derive(Debug, thiserror::Error)]
@@ -42,6 +46,10 @@ impl Tool for SearcherTool {
                 "type": "object",
                 "properties": {
                     "query": { "type": "string", "description": "Query to search for" },
+                    "max_results": { "type": "integer", "description": "Maximum number of results to return" },
+                    "advanced_search": { "type": "boolean", "description": "Enable advanced search" },
+                    "topic": { "type": "string", "description": "Topic to search for, e.g., 'news'" },
+                    "include_days": { "type": "integer", "description": "Number of days to include in search, only available with 'news' topic is used" },
                 },
                 "required": ["query"]
             }),
@@ -52,6 +60,17 @@ impl Tool for SearcherTool {
         let tavily_api_key = std::env::var("TAVILY_API_KEY")
             .map_err(|_| SearcherError::TavilyError("Missing Tavily API key".to_string()))?;
 
+        let advanced_search = match args.advanced_search {
+            Some(true) => "advanced",
+            _ => "basic",
+        };
+
+        let search_request = SearchRequest::new(&tavily_api_key, &args.query)
+            .search_depth(advanced_search)
+            .max_results(args.max_results.unwrap_or(5))
+            .topic(args.topic.unwrap_or("general".to_string()))
+            .days(args.include_days.unwrap_or(3));
+
         let tavily = Tavily::builder(&tavily_api_key)
             .timeout(Duration::from_secs(30))
             .max_retries(3)
@@ -61,7 +80,7 @@ impl Tool for SearcherTool {
             })?;
 
         let search_response = tavily
-            .search(&args.query)
+            .call(&search_request)
             .await
             .map_err(|e| SearcherError::SearchFailed(e.to_string()))?;
 
