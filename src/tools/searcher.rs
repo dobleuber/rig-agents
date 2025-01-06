@@ -67,11 +67,11 @@ impl Tool for SearcherTool {
 
         let mapped_results = search_response
             .results
-            .iter()
+            .into_iter()
             .map(|result| SearcherOutput {
-                title: result.title.clone(),
-                url: result.url.clone(),
-                content: result.content.clone(),
+                title: result.title,
+                url: result.url,
+                content: result.content,
             })
             .collect();
 
