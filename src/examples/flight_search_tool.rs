@@ -1,4 +1,4 @@
-use chrono::{DateTime, Duration, Utc};
+use chrono::{Duration, Utc};
 use rig::completion::ToolDefinition;
 use rig::tool::Tool;
 use serde::{Deserialize, Serialize};
@@ -40,8 +40,6 @@ pub enum FlightSearchError {
     HttpRequestFailed(String),
     #[error("Invalid response structure")]
     InvalidResponse,
-    #[error("API Error: {0}")]
-    ApiError(String),
     #[error("Missing API key")]
     MissingApiKey,
 }
